@@ -1,4 +1,4 @@
-import {  useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import {
   LensClient,
@@ -50,6 +50,7 @@ const Authenticate = () => {
       const defaultProfile = allOwnedProfiles.items[0];
       setProfile(defaultProfile);
     }
+    console.log(profile);
   };
   const logout = async () => {
     setIsAuthenticated(false);
@@ -107,7 +108,7 @@ const Authenticate = () => {
         );
 
       }
-    } 
+    }
     catch (error) {
       console.error("Operation failed:", error.message);
     }
@@ -202,6 +203,7 @@ const Authenticate = () => {
     }
   };
 
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 m-4 bg-white rounded shadow-md">
@@ -217,57 +219,69 @@ const Authenticate = () => {
         </p>
         {isAuthenticated && (
           <>
-            <p className="mt-4 text-lg text-center">Logged in as: {profile?.handle}</p>
-            <input
-              className="w-full p-2 mt-4 border border-gray-400 rounded"
-              type="file"
-              ref={fileInputRef}
-              onChange={() => {
-                setPostId("");
-                setStatusMessage("");
-                setContent("");
-              }}
-            />
-            <input
-              className="w-full p-2 mt-4 border border-gray-400 rounded"
-              type="text"
-              placeholder="Enter your post content"
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-              value={content}
-            />
-            <button
-              className="w-full px-4 py-2 mt-4 text-white bg-yellow-500 rounded hover:bg-yellow-700"
-              onClick={createPost}
-            >
-              Create Post
-            </button>
-            {statusMessage && <p className="mt-4 text-lg text-center">{statusMessage}</p>}
-
-            {postId && (
+            {profile ? (
               <>
-                <p className="mt-4 text-lg text-center">Post Id: {postId}</p>
-                <a
-                  href={`https://testnet.lenster.xyz/posts/${postId}`}
-                  target="_blank"
-                  rel="noreferrer"
+                <p className="mt-4 text-lg text-center">Logged in as: {profile?.handle}</p>
+                <input
+                  className="w-full p-2 mt-4 border border-gray-400 rounded"
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={() => {
+                    setPostId("");
+                    setStatusMessage("");
+                    setContent("");
+                  }}
+                />
+                <input
+                  className="w-full p-2 mt-4 border border-gray-400 rounded"
+                  type="text"
+                  placeholder="Enter your post content"
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  value={content}
+                />
+                <button
+                  className="w-full px-4 py-2 mt-4 text-white bg-yellow-500 rounded hover:bg-yellow-700"
+                  onClick={createPost}
                 >
-                  <button className="w-full px-4 py-2 mt-4 text-white bg-yellow-500 rounded hover:bg-yellow-700">
-                    View Post on lenster
-                  </button>
-                </a>
+                  Create Post
+                </button>
+                {statusMessage && <p className="mt-4 text-lg text-center">{statusMessage}</p>}
+
+                {postId && (
+                  <>
+                    <p className="mt-4 text-lg text-center">Post Id: {postId}</p>
+                    <a
+                      href={`https://testnet.lenster.xyz/posts/${postId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <button className="w-full px-4 py-2 mt-4 text-white bg-yellow-500 rounded hover:bg-yellow-700">
+                        View Post on lenster
+                      </button>
+                    </a>
+                  </>
+                )}
+                <button
+                  className="w-full px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-700"
+                  onClick={logout}
+                >
+                  Logout
+                </button>
               </>
+            ) : (
+              <p className="mt-4 text-lg text-center">Seem like you don't have a lens Profile</p>
             )}
-            <button
-              className="w-full px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-700"
-              onClick={logout}
-            >
-              Logout
-            </button>
           </>
         )}
       </div>
+      <div className="relative bottom">
+        <p className="text-center text-red-500 text-xl">
+          Test on Polygon Mumbai
+        </p>
+        </div>
+
     </div>
   );
 };
